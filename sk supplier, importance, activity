@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+# Parameters
+min_date = datetime(2022, 1, 1)
+max_date = datetime(2025, 12, 31)
+
+# Assuming f_purchase_order is already defined as in your provided code
+# Extract unique sk_orders from f_purchase_order
+unique_sk_orders = f_purchase_order['sk_order'].unique()
+
+# Number of unique orders
+num_orders = len(unique_sk_orders)
+
+# Generate data
+order_dates = [min_date + timedelta(days=np.random.randint(0, (max_date - min_date).days + 1)) for _ in range(num_orders)]
+sk_suppliers = np.random.randint(1, 51, size=num_orders)  # Suppliers range between 1 and 50
+
+# Categorize suppliers with new "severe impact" category
+def categorize_supplier(supplier_id):
+    if supplier_id <= 5:
+        return "severe impact"
+    elif supplier_id <= 15:
+        return "high impact"
+    elif supplier_id <= 30:
+        return "medium impact"
+    else:
+        return "light impact"
+
+importance_supplier = np.array([categorize_supplier(s) for s in sk_suppliers])
+
+# Generate activity column (25-33% active, rest non active)
+active_ratio = np.random.uniform(0.25, 0.33)  # Randomly select a percentage in the range
+num_active = int(num_orders * active_ratio)  # Calculate number of active orders
+
+# Generate activity list
+activity_values = np.array(["active"] * num_active + ["non active"] * (num_orders - num_active))
+np.random.shuffle(activity_values)  # Shuffle to randomize active/non-active distribution
+
+# Create d_purchase_order DataFrame
+d_purchase_order = pd.DataFrame({
+    'sk_order': unique_sk_orders,
+    'order_date': order_dates,
+    'sk_supplier': sk_suppliers,
+    'importance_supplier': importance_supplier,
+    'activity': activity_values
+})
+
+# Display first few rows
+print(d_purchase_order.head())
+
+# Save to CSV (optional)
+d_purchase_order.to_csv('d_purchase_order.csv', index=False)

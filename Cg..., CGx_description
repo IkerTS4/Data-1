@@ -1,0 +1,63 @@
+import pandas as pd
+import random
+
+# CG1 categories
+cg1_categories = [
+    {"code": 1, "description": "Clothing"},
+    {"code": 2, "description": "Shoes"},
+    {"code": 3, "description": "Accessories"},
+    {"code": 4, "description": "Beauty"},
+    {"code": 5, "description": "Electronics"}
+]
+
+# CG2 categories (gender for most, but different for Electronics)
+cg2_categories = {
+    1: ["Men", "Women", "Kids", "Unisex"],  # Clothing
+    2: ["Men", "Women", "Kids", "Unisex"],  # Shoes
+    3: ["Men", "Women", "Kids", "Unisex"],  # Accessories
+    4: ["Men", "Women", "Kids", "Unisex"],  # Beauty
+    5: ["Smartphones", "Laptops", "Home Appliances", "Audio", "Gaming"]  # Electronics
+}
+
+# CG3 categories (detailed subcategories)
+cg3_categories = {
+    1: ["T-Shirts", "Trousers", "Shorts", "Skirts", "Dresses", "Sweaters", "Jackets", "Coats"],
+    2: ["Sneakers", "Boots", "Sports Shoes", "Sandals", "Formal Shoes"],
+    3: ["Hats", "Belts", "Gloves", "Watches", "Sunglasses", "Scarves", "Jewelry"],
+    4: ["Perfume", "Makeup", "Skincare", "Haircare", "Nail Polish"],
+    5: ["Smartphones", "Laptops", "Tablets", "Headphones", "Cameras", "Speakers", "Gaming Consoles"]
+}
+
+# Generate the dataset
+rows = []
+sk_cg = 1  # Start the sk_cg index
+
+for cg1 in cg1_categories:
+    cg1_code = cg1["code"]
+    cg1_desc = cg1["description"]
+
+    for cg2_desc in cg2_categories[cg1_code]:
+        cg2_code = cg2_categories[cg1_code].index(cg2_desc) + 1
+
+        # Ensure at least 250 unique CG3 combinations
+        for cg3_desc in random.sample(cg3_categories[cg1_code], len(cg3_categories[cg1_code])):
+            cg3_code = cg3_categories[cg1_code].index(cg3_desc) + 1
+            rows.append({
+                "sk_cg": sk_cg,
+                "CG1_code": cg1_code,
+                "CG2_code": cg2_code,
+                "CG3_code": cg3_code,
+                "CG1_description": cg1_desc,
+                "CG2_description": cg2_desc,
+                "CG3_description": cg3_desc
+            })
+            sk_cg += 1
+
+# Create a DataFrame
+commodity_groups_df = pd.DataFrame(rows)
+
+# Display Results
+print(commodity_groups_df)
+
+# Save to CSV (optional)
+commodity_groups_df.to_csv('commodity_groups.csv', index=False)

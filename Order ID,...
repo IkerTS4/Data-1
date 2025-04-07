@@ -1,0 +1,64 @@
+import pandas as pd
+import numpy as np
+from scipy.stats import truncnorm
+
+# Set seed for reproducibility
+np.random.seed(42)
+
+# Number of rows
+num_rows = 500000
+
+# Aproximación del número de órdenes únicas
+num_orders = num_rows // 150
+
+# Función para generar una distribución normal truncada
+def truncated_normal(mean, std, low, high, size):
+    a, b = (low - mean) / std, (high - mean) / std  # Normalización
+    return truncnorm.rvs(a, b, loc=mean, scale=std, size=size).astype(int)
+
+# Generar el número de artículos por orden con distribución normal truncada
+articles_per_order = truncated_normal(mean=100, std=50, low=20, high=1000, size=num_orders)
+
+# Generar los identificadores de orden
+sk_orders = np.repeat(np.arange(1, num_orders + 1), articles_per_order)
+
+# Ajustar al número exacto de filas
+if len(sk_orders) < num_rows:
+    extra_orders = np.random.choice(sk_orders, num_rows - len(sk_orders), replace=True)
+    sk_orders = np.concatenate([sk_orders, extra_orders])
+else:
+    sk_orders = sk_orders[:num_rows]
+
+# Generate sk_order_article as unique index
+sk_order_articles = np.arange(1, num_rows + 1)
+
+# Generate sk_article IDs
+sk_articles = np.random.randint(1, 10001, size=num_rows)
+
+# Generar cantidad ordenada con distribución normal
+mean = 130   # Media centrada en el rango original
+std_dev = 60  # Desviación estándar más alta para mayor variabilidad
+ordered_quantities = np.random.normal(mean, std_dev, size=num_rows).astype(int)
+ordered_quantities = np.clip(ordered_quantities, 10, 250)  # Asegurar valores dentro del rango
+
+# Generar valores de purchase_condition
+mean_value = np.random.uniform(0.26, 0.29)  # Media en el rango deseado
+std_dev = 0.12  # Mayor variabilidad
+
+purchase_conditions = np.random.normal(loc=mean_value, scale=std_dev, size=num_rows)
+purchase_conditions = np.clip(purchase_conditions, 0.05, 0.40)  # Mantener dentro del rango
+
+# Crear DataFrame
+f_purchase_order = pd.DataFrame({
+    'sk_order_article': sk_order_articles,
+    'sk_order': sk_orders,
+    'sk_article': sk_articles,
+    'ordered_quantity': ordered_quantities,
+    'purchase_condition': np.round(purchase_conditions, 2)
+})
+
+# Guardar a CSV
+f_purchase_order.to_csv("purchase_dataset.csv", index=False)
+
+# Mostrar primeras filas
+print(f_purchase_order.head())

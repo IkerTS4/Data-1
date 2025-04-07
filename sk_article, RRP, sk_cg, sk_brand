@@ -1,0 +1,37 @@
+import pandas as pd
+import numpy as np
+
+# Set parameters
+num_articles = 10000
+num_brands = 200  # Number of brands
+num_cgs = 135  # Number of CGs
+mean_rrp = 95
+std_dev_rrp = 50  # Small standard deviation to keep prices realistic
+min_rrp = 10
+max_rrp = 350
+
+# Generate unique sk_article IDs
+sk_articles = np.arange(1, num_articles + 1)
+
+# Generate normally distributed RRP prices, clipped within the valid range
+rrp_prices = np.clip(np.random.normal(mean_rrp, std_dev_rrp, num_articles), min_rrp, max_rrp)
+
+# Assign random sk_brand values (between 1 and 200)
+sk_brands = np.random.randint(1, num_brands + 1, num_articles)
+
+# Assign random sk_cg values (between 1 and 135)
+sk_cg = np.random.randint(1, num_cgs + 1, num_articles)
+
+# Create DataFrame
+articles_df = pd.DataFrame({
+    'sk_article': sk_articles,
+    'RRP': np.round(rrp_prices, 2),  # Keep two decimal places
+    'sk_brand': sk_brands,  # Random brand assignment
+    'sk_cg': sk_cg  # Random brand assignment
+})
+
+# Display first few rows
+print(articles_df.head())
+
+# Save to CSV (optional)
+articles_df.to_csv('articles_df.csv', index=False)

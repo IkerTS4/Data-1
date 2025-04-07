@@ -1,0 +1,64 @@
+import pandas as pd
+import sqlite3
+
+# Example: Load CSVs (or use existing DataFrames)
+# f_purchase_order = pd.read_csv('purchase_orders.csv')  # Replace with your actual DataFrame
+# articles_df = pd.read_csv('articles_df.csv')  # Replace with your actual DataFrame
+
+# Example: Another DataFrame to join with (e.g., brands_df)
+# brands_df = pd.read_csv('brands_df.csv')  # Contains sk_brand and brand_name columns
+
+# Create an SQLite in-memory database
+conn = sqlite3.connect(":memory:")
+
+# Load DataFrames into the SQLite database as tables
+f_purchase_order.to_sql('f_purchase_order', conn, index=False, if_exists='replace')
+d_purchase_order.to_sql('d_purchase_order', conn, index=False, if_exists='replace')
+articles_df.to_sql('articles', conn, index=False, if_exists='replace')
+brands_df.to_sql('brands', conn, index=False, if_exists='replace')
+supplier_df.to_sql('suppliers', conn, index=False, if_exists='replace')
+commodity_groups_df.to_sql('commodity_groups', conn, index=False, if_exists='replace')
+
+
+# Write the SQL query to join all DataFrames
+query = """
+    SELECT
+        fpo.*,
+        dpo.order_date,
+        sp.supplier_name,
+        sp.supplier_country,
+        a.RRP,
+        b.sk_brand,
+        b.brand_name,
+        cg.sk_cg,
+        cg.CG1_description,
+        cg.CG2_description,
+        cg.CG3_description,
+        importance_supplier,
+        activity,
+        city
+    FROM
+        f_purchase_order fpo
+    LEFT JOIN
+        d_purchase_order dpo ON fpo.sk_order = dpo.sk_order
+    LEFT JOIN
+        articles a ON fpo.sk_article = a.sk_article
+    LEFT JOIN
+        brands b ON a.sk_brand = b.sk_brand
+    LEFT JOIN
+        suppliers sp ON dpo.sk_supplier = sp.sk_supplier
+    LEFT JOIN
+        commodity_groups cg ON a.sk_cg = cg.sk_cg
+"""
+
+# Execute the SQL query
+final_df = pd.read_sql_query(query, conn)
+
+# Display the first few rows to verify
+print(final_df.head())
+
+# Save the result to a CSV (optional)
+final_df.to_csv('final_df.csv', index=False)
+
+# Close the connection
+conn.close()

@@ -1,0 +1,42 @@
+import pandas as pd
+
+# Generate 200 unique fashion brand names
+fashion_brands = [
+    "Gucci", "Prada", "Louis Vuitton", "Chanel", "Versace", "Dior", "Balenciaga", "Armani", "Burberry", "Fendi",
+    "Givenchy", "Hermès", "Valentino", "Saint Laurent", "Bottega Veneta", "Alexander McQueen", "Ralph Lauren",
+    "Calvin Klein", "Tom Ford", "Dolce & Gabbana", "Kenzo", "Off-White", "Zara", "Hugo Boss", "Tommy Hilfiger",
+    "Michael Kors", "Lacoste", "Coach", "Balmain", "Moschino", "Dsquared2", "Marc Jacobs", "Brunello Cucinelli",
+    "Moncler", "Ermenegildo Zegna", "Salvatore Ferragamo", "Etro", "Dries Van Noten", "Tod’s", "Missoni", "Miu Miu",
+    "Roberto Cavalli", "Jimmy Choo", "Kate Spade", "Stella McCartney", "Theory", "A.P.C.", "Rick Owens", "Supreme",
+    "Stone Island", "Ganni", "Rag & Bone", "Isabel Marant", "Reiss", "H&M", "Nike", "Adidas", "New Balance",
+    "Reebok", "Puma", "Under Armour", "Fila", "Converse", "Vans", "Timberland", "Levi’s", "Dockers", "Carhartt",
+    "Patagonia", "The North Face", "Columbia", "Barbour", "Jack Wolfskin", "Champion", "Billionaire Boys Club",
+    "Palm Angels", "Fear of God", "Neighborhood", "A Bathing Ape", "Comme des Garçons", "Y-3", "Vetements",
+    "Yeezy", "Evisu", "Superdry", "True Religion", "Guess", "Abercrombie & Fitch", "Hollister", "G-Star Raw",
+    "Diesel", "Wrangler", "Lee", "7 For All Mankind", "AG Jeans", "Joe’s Jeans", "Madewell", "J.Crew",
+    "Banana Republic", "Anthropologie", "Free People", "Urban Outfitters", "Express", "Uniqlo", "Muji",
+    "COS", "Massimo Dutti", "Mango", "Bershka", "Stradivarius", "Pull & Bear", "Superga", "Onitsuka Tiger",
+    "Saucony", "Brooks", "Merrell", "Birkenstock", "UGG", "Dr. Martens", "Red Wing Shoes", "Wolverine",
+    "Clarks", "Alden", "Tricker’s", "Church’s", "Grenson", "John Lobb", "Allen Edmonds", "Meermin", "Santoni",
+    "Magnanni", "Paul Smith", "Loewe", "Celine", "JW Anderson", "Thom Browne", "Brioni", "Kiton", "Lardini",
+    "Canali", "Boglioli", "Corneliani", "Hackett", "Orlebar Brown", "Sunspel", "James Perse", "Eton", "Turnbull & Asser",
+    "Charvet", "Lululemon", "Alo Yoga", "Vuori", "Gymshark", "Outdoor Voices", "Athleta", "Sweaty Betty",
+    "Warby Parker", "Gentle Monster", "Oliver Peoples", "Ray-Ban", "Persol", "Moscot", "Garrett Leight",
+    "Jacquemus", "Rhude", "Noah", "Carven", "Balibaris", "Helmut Lang", "Opening Ceremony", "Maison Kitsuné",
+    "Sacai", "Undercover", "Wacko Maria", "Our Legacy", "Nanamica", "Beams", "Engineered Garments", "Nigel Cabourn",
+    "Neighborhood", "Visvim", "Kapital", "Porter", "Acne Studios", "AMI Paris", "Axel Arigato", "Byredo",
+    "Common Projects", "Fear of God Essentials", "John Elliott", "Represent", "Reigning Champ", "Needles",
+    "South2 West8", "Kapital", "Human Made", "Mastermind Japan", "Fragment Design"
+]
+
+# Create unique brand IDs
+sk_brands = list(range(1, len(fashion_brands) + 1))
+
+# Create DataFrame
+brands_df = pd.DataFrame({
+    'sk_brand': sk_brands,
+    'brand_name': fashion_brands
+})
+
+# Display the first few rows
+print(brands_df.head())

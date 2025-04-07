@@ -1,0 +1,62 @@
+import pandas as pd
+import random
+
+# Parameters
+num_suppliers = 100
+countries = {
+    "France": ["Paris", "Lyon", "Marseille", "Nice"],
+    "Germany": ["Berlin", "Munich", "Hamburg", "Cologne"],
+    "Italy": ["Rome", "Milan", "Naples", "Turin"],
+    "Spain": ["Madrid", "Barcelona", "Seville", "Valencia"],
+    "United Kingdom": ["London", "Manchester", "Birmingham", "Edinburgh"],
+    "Netherlands": ["Amsterdam", "Rotterdam", "The Hague", "Utrecht"],
+    "Sweden": ["Stockholm", "Gothenburg", "Malmo", "Uppsala"],
+    "Denmark": ["Copenhagen", "Aarhus", "Odense", "Aalborg"],
+    "Belgium": ["Brussels", "Antwerp", "Ghent", "Bruges"],
+    "Austria": ["Vienna", "Graz", "Linz", "Salzburg"],
+    "Portugal": ["Lisbon", "Porto", "Coimbra", "Braga"],
+    "Greece": ["Athens", "Thessaloniki", "Patras", "Heraklion"],
+    "Poland": ["Warsaw", "Krakow", "Wroclaw", "Gdansk"],
+    "Czech Republic": ["Prague", "Brno", "Ostrava", "Plzen"],
+    "Hungary": ["Budapest", "Debrecen", "Szeged", "Miskolc"],
+    "Ireland": ["Dublin", "Cork", "Limerick", "Galway"],
+    "Finland": ["Helsinki", "Espoo", "Tampere", "Vantaa"],
+    "Norway": ["Oslo", "Bergen", "Trondheim", "Stavanger"],
+    "Switzerland": ["Zurich", "Geneva", "Basel", "Bern"],
+    "Luxembourg": ["Luxembourg City", "Esch-sur-Alzette", "Differdange", "Dudelange"]
+}
+
+# Generate random supplier names with singular terms
+fashion_keywords = [
+    "Fashion", "Textile", "Wear", "Clothing", "Style", "Apparel", "Design",
+    "Thread", "Outfitter", "Collection", "Chic", "Trend", "Couture", "Elegant",
+    "Classic", "Modern", "Mode", "Wardrobe", "Finery", "Heritage"
+]
+
+supplier_names = []
+for _ in range(num_suppliers):
+    name = f"{random.choice(fashion_keywords)} {random.choice(fashion_keywords)} Co."
+    while name in supplier_names:  # Ensure unique names
+        name = f"{random.choice(fashion_keywords)} {random.choice(fashion_keywords)} Co."
+    supplier_names.append(name)
+
+# Assign countries and cities randomly
+supplier_countries = [random.choice(list(countries.keys())) for _ in range(num_suppliers)]
+supplier_cities = [random.choice(countries[country]) for country in supplier_countries]
+
+# Create sk_supplier
+sk_supplier = list(range(1, num_suppliers + 1))
+
+# Create DataFrame
+supplier_df = pd.DataFrame({
+    "sk_supplier": sk_supplier,
+    "supplier_name": supplier_names,
+    "supplier_country": supplier_countries,
+    "city": supplier_cities
+})
+
+# Display first few rows
+print(supplier_df.head())
+
+# Save to CSV (optional)
+supplier_df.to_csv('supplier_df.csv', index=False)
